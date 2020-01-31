@@ -1,0 +1,31 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 1.2
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 1.2}
+In case of Ridge Regression, the objective is
+\begin{equation}
+	\underset{w}{\text{minimize}}\left\Vert Xw-y \right\Vert^2 + \lambda\left\Vert w \right\Vert^2
+\end{equation}
+where, $\lambda > 0$
+\par
+The cost function is
+\begin{equation}
+\label{cost_func_ridge}
+	J(w) = \left\Vert Xw-y \right\Vert^2 = (Xw -y)^T(Xw -y) + \lambda w^Tw
+\end{equation}
+By definition,
+\begin{equation}
+\label{cost_deri_ridge}
+	\begin{split}
+					& J(w) = \sum_{i=1}^{n}\left[ \sum_{j=1}^{m}(x_{ij}w_j)-y_i \right]^2 + \sum_{j=1}^{m}\lambda w_j^2\\
+		\implies 	& \frac{\partial J}{\partial w_k} = \sum_{i=1}^{n} 2 \left[ \sum_{j=1}^{m}(x_{ij}w_j)-y_i \right]x_{ik} + 2\lambda w_k\\
+	\end{split}
+\end{equation}
+Equating (\ref{cost_deri_ridge}) to $0$ for each $w_k, k=1,2,\dots, m$, and in vector form, we get - 
+\begin{equation}
+	\begin{split}
+					& X^T(Xw^* - y) + \lambda w^* = 0\\
+		\implies	& (X^TX + \lambda I)w^* = X^Ty\\
+		\implies	& w^* = (X^TX + \lambda I)^{-1}X^Ty\\
+	\end{split}
+\end{equation}

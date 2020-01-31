@@ -1,0 +1,31 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 1.1
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 1.1}
+The objective is
+\begin{equation}
+	\underset{w}{\text{minimize}}\left\Vert Xw-y \right\Vert^2
+\end{equation}
+where, $X \in \mathbb{R}^{n \times m}$, $(n \geq m)$ represents the feature matrix, $y \in \mathbb{R}^{n \times 1}$ represents the response vector and $w \in \mathbb{R}^{m \times 1}$ is the vector variable of the linear coefficients.
+\par
+The cost function is
+\begin{equation}
+\label{cost_func}
+	J(w) = \left\Vert Xw-y \right\Vert^2 = (Xw -y)^T(Xw -y)
+\end{equation}
+By definition,
+\begin{equation}
+\label{cost_deri}
+	\begin{split}
+					& J(w) = \sum_{i=1}^{n}\left[ \sum_{j=1}^{m}(x_{ij}w_j)-y_i \right]^2\\
+		\implies 	& \frac{\partial J}{\partial w_k} = \sum_{i=1}^{n} 2 \left[ \sum_{j=1}^{m}(x_{ij}w_j)-y_i \right]x_{ik}\\
+	\end{split}
+\end{equation}
+Equating (\ref{cost_deri}) to $0$ for each $w_k, k=1,2,\dots, m$, and in vector form, we get - 
+\begin{equation}
+	\begin{split}
+					& X^T(Xw^* - y) = 0\\
+		\implies	& X^TXw^* = X^Ty\\
+		\implies	& w^* = (X^TX)^{-1}X^Ty\\
+	\end{split}
+\end{equation}
