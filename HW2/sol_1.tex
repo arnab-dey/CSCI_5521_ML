@@ -1,0 +1,117 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 1.a
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 1.a}
+In multi-variate case when $\xVec$ is $d$-dimensional and normal distributed, we have
+\begin{equation*}
+	P(\xVec|C_i) = \prod_{t=1}^{N_i} \frac{1}{(2\pi)^{d/2}|\SigmaVec_i|^{1/2}} exp\left[-\frac{1}{2} \left(\xVec^t-\muVec_i\right)^T\SigmaVec_i^{-1}\left(\xVec^t - \muVec_i\right)\right]
+\end{equation*}
+where $N_i$ is the total number of samples in class $C_i$, $\SigmaVec_i$ is the covariance matrix for the variables belonging to each sample of class $C_i$, $\muVec_i$ is the mean vector for samples in class $C_i$.
+\newline
+%----------------------------------------------------------------------------------------
+%	Log likelihood
+%----------------------------------------------------------------------------------------
+The log-likelihood function to estimate $\muVec_i$ and $\SigmaVec_i$ is given as follows:
+\begin{equation}\label{eq:log_likelihood}
+	\begin{split}
+		L(\muVec_i, \SigmaVec_i|\xVec) &= \sum_{t=1}^{N_i} \ln \left(\frac{1}{(2\pi)^{d/2}|\SigmaVec_i|^{1/2}} exp\left[-\frac{1}{2} \left(\xVec^t-\muVec_i\right)^T\SigmaVec_i^{-1}\left(\xVec^t - \muVec_i\right)\right]\right)\\
+		&= -\frac{N_id}{2}\ln(2\pi) - \frac{N_i}{2}\ln|\SigmaVec_i| -\frac{1}{2}\sum_{t=1}^{N_i}\left(\left(\xVec^t-\muVec_i\right)^T\SigmaVec_i^{-1}\left(\xVec^t - \muVec_i\right)\right)
+	\end{split}
+\end{equation}
+%----------------------------------------------------------------------------------------
+%	MLE of mean
+%----------------------------------------------------------------------------------------
+From Eq.\ref{eq:log_likelihood}, to find the estimate of $\muVec_i$, what we denote as $\mVec_i$, we set the derivative of log-likehood function w.r.t $\muVec_i$ to 0.
+\begin{equation}\label{eq:mle_mean}
+	\begin{split}
+		& \frac{\partial L}{\partial \muVec_i} = 0\\
+		\implies & 0 = -\frac{1}{2}\sum_{t=1}^{N_i}\left(2\SigmaVec_i^{-1}\left(\xVec^t-\mVec_i\right)(-1)\right)\\
+		\implies & 0 = \sum_{t=1}^{N_i}\left(\SigmaVec_i^{-1}\xVec^t - \SigmaVec_i^{-1}\mVec_i\right)\\
+		\implies & N_i\mVec_i = \sum_{t=1}^{N_i}\xVec^t \hspace*{1cm}[Pre-multiplying\ by\ \SigmaVec_i]\\
+		\implies & \mVec_i = \frac{1}{N_i}\sum_{t=1}^{N_i}\xVec^t\\
+	\end{split}
+\end{equation}
+%----------------------------------------------------------------------------------------
+%	MLE of covariance
+%----------------------------------------------------------------------------------------
+Similarly, we can find the estimate of $\SigmaVec_i$. Before, doing that let us write the terms of log-likelihood function which depends on $\SigmaVec_i$ as the other terms will eventually become 0 when we will take the derivative. We will also use the fact that
+\begin{equation*}
+	\xVec^T A \xVec = trace[\xVec^T A \xVec] = trace[\xVec \xVec^T A]
+\end{equation*} 
+The log-likelihhod function involving the terms that depend on $\SigmaVec_i$ can be written as:
+\begin{equation}
+	\begin{split}
+		&L' = - \frac{N_i}{2}\ln|\SigmaVec_i| -\frac{1}{2}\sum_{t=1}^{N_i}\left(\left(\xVec^t-\muVec_i\right)^T\SigmaVec_i^{-1}\left(\xVec^t - \muVec_i\right)\right)\\
+		&= \frac{N_i}{2}\ln|\SigmaVec_i^{-1}| -\frac{1}{2}\sum_{t=1}^{N_i}\left(trace\left[\left(\xVec^t-\muVec_i\right)^T\SigmaVec_i^{-1}\left(\xVec^t - \muVec_i\right)\right]\right)\\
+		&= \frac{N_i}{2}\ln|\SigmaVec_i^{-1}| -\frac{1}{2}\sum_{t=1}^{N_i}\left(trace\left[\left(\xVec^t - \muVec_i\right)\left(\xVec^t-\muVec_i\right)^T\SigmaVec_i^{-1}\right]\right)\\
+	\end{split}
+\end{equation}
+From Eq.\ref{eq:log_likelihood}, to find the estimate of $\SigmaVec_i$, what we denote as $\sVec_i$, we can equivalently set the derivative of $L'$ w.r.t $\SigmaVec_i^{-1}$ to 0, i.e.
+\begin{equation}
+	\begin{split}
+		&\frac{\partial L'}{\partial \SigmaVec_i^{-1}} = 0\\
+		\implies & 0 = \frac{N_i}{2}\sVec_i - \frac{1}{2}\sum_{t=1}^{N_i}\left(\left(\xVec^t - \muVec_i\right)\left(\xVec^t-\muVec_i\right)^T\right)\\
+		\implies & \sVec_i = \frac{1}{N_i}\sum_{t=1}^{N_i}\left(\left(\xVec^t - \muVec_i\right)\left(\xVec^t-\muVec_i\right)^T\right)\\
+	\end{split}
+\end{equation}
+Using the estimate of $\muVec_i$, $\mVec_i$, we can write
+\begin{equation}\label{eq:mle_cov}
+	\sVec_i = \frac{1}{N_i}\sum_{t=1}^{N_i}\left(\left(\xVec^t - \mVec_i\right)\left(\xVec^t-\mVec_i\right)^T\right)
+\end{equation}
+%----------------------------------------------------------------------------------------
+%	Model 1
+%----------------------------------------------------------------------------------------
+For model 1,  where $\boldsymbol{S_1}$ and $\boldsymbol{S_2}$ are independent, we have to use the equations as shown in Eq.\ref{eq:mle_cov} and Eq.\ref{eq:mle_mean}.
+%----------------------------------------------------------------------------------------
+%	Model 2
+%----------------------------------------------------------------------------------------
+For model 2, we assume that $\boldsymbol{S}$ is shared between two classes, therefore, we need to take the expectation of what is given in Eq.\ref{eq:mle_cov}. Hence,
+\begin{equation*}
+	\boldsymbol{S_1} = \boldsymbol{S_2} = P(C_1)\boldsymbol{S_1} + P(C_2)\boldsymbol{S_2}
+\end{equation*}
+where $\boldsymbol{S_i}$ is given in Eq.\ref{eq:mle_cov}.
+%----------------------------------------------------------------------------------------
+%	Model 3
+%----------------------------------------------------------------------------------------
+\newline
+For model 3, we assume that variables in the samples of each class are independent. Therefore, in this case we have to take only the diagonal terms of corresponding $\sVec_i$ from Eq.\ref{eq:mle_cov} setting all the off-diagonal terms to 0.
+\subsection*{Solution 1.c}
+Table \ref{tbl:multi_gauss_1c} shows the error rates for different models on different test sets.
+\begin{table}[!h]
+	\begin{center}
+		\begin{tabular}{||c | c | c | c||} 
+			\hline
+			Model & 1 & 2 & 3 \\ [0.5ex] 
+			\hline\hline
+			test set 1 & 30.0\% & 24.5\% &25.0\% \\
+			\hline
+			test set 2 & 4.5\% &21.0\% & 14.5\% \\
+			\hline
+			test set 3 & 23.5\% & 25.5\% &21.5\% \\ [1ex]
+			\hline
+		\end{tabular}
+		\caption{Q1.c: Error-rates for different models and different test sets}
+		\label{tbl:multi_gauss_1c}
+	\end{center}
+\end{table}
+\newline
+From the table if we match the data pair to the model which gives lowest error rates on the test data then we can conclude the following:
+\begin{table}[!h]
+	\begin{center}
+		\begin{tabular}{||c | c ||} 
+			\hline
+			data pair & Chosen model \\ [0.5ex] 
+			\hline\hline
+			data pair 1 & 2 \\
+			\hline
+			data pair 2 & 1 \\
+			\hline
+			data pair 3 & 3 \\ [1ex]
+			\hline
+		\end{tabular}
+		\caption{Q1.c: Chosen model for each data pair based on lowest error rate on test data set}
+		\label{tbl:chosen_model_1c}
+	\end{center}
+\end{table}
+\subsubsection*{Explanantion of different error rates with different models}
+When we choose independent $S_1$ and $S_2$, the discriminant is non-linear. Moreover, when model 2 is chosen, the discriminant becomes linear and finally if model 3 is chosen, we assume that the variables are independent. Therefore, as data pair 2 gives lowest error rate with model 1, we can say that the data in the data pair 2 is not linearly separable and does not have independent variables. Data pair 1 can be linearly separable but variables are not independent. For data pair 3, the data are linearly separable and variables are independent also.

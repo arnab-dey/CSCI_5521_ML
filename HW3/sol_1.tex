@@ -1,0 +1,95 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 1.a
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 1}
+\paragraph{Definitions}
+$\zVec^t$ is the vector of indicator variables, $\zVec^t=\{z^t_1, z^t_2,\ldots,z^t_K\}$, where $z^t_i =1$ is $\xVec^t$ belongs to cluster $G_i$.\\
+Total dataset is denoted as $X = \{\xVec^t\}^{N}_{t=1}$ and unobserved random variable dataset is $Z = \{\zVec^t\}^{N}_{t=1}$
+\paragraph{Complete log-likelihood} The complete log-likelihood function is given by:
+\begin{equation}
+	\begin{split}
+		\mathcal{L}_c(\phi | X, Z) &= \ln p(X, Z | \phi)\\
+		&= \ln \prod_{t=1}^N p(\xVec^t, \zVec^t | \phi)\\
+		&= \sum_{t=1}^{N} \ln p(\xVec^t, \zVec^t | \phi)\\
+		&= \sum_{t=1}^{N} \ln \left(p(\xVec^t|\zVec^t, \phi)p(\zVec^t|\phi)\right)\\
+		&= \sum_{t=1}^{N} \left[\ln p(\xVec^t|\zVec^t, \phi) + \ln p(\zVec^t|\phi)\right]\\
+		&= \sum_{t=1}^{N} \left[\ln \left(\prod_{i=1}^{K} p_i(\xVec^t|\phi)^{z^t_i}\right) + \ln \left(\prod_{i=1}^{K}p(G_i)^{z^t_i}\right)\right]\\
+		&= \sum_{t=1}^{N} \left[\sum_{i=1}^{K} z^t_i \ln p(\xVec^t|\phi) + \sum_{i=1}^{K} z^t_i \ln p(G_i)\right]\\
+		&= \sum_{t=1}^{N} \sum_{i=1}^{K} z^t_i \left[\ln p(\xVec^t|\phi) + \ln \pi_i\right]
+	\end{split}
+\end{equation}
+\paragraph{E-step:} Here, we try to find the expectation of complete log-likelihood given the observed dataset and prior parameters $\phi$. Thus,
+\begin{align}\label{eq:e_step}
+	\mathcal{E}(\phi|\phi^l) &= \mathbf{E}[\mathcal{L}_c(\phi|X,Z)|X,\phi^l] \nonumber\\
+	&= \mathbf{E}\left[\sum_{t=1}^{N} \sum_{i=1}^{K} z^t_i \left[\ln p(\xVec^t|\phi) + \ln \pi_i\right]|X,\phi^l\right] \nonumber\\
+	&= \sum_{t=1}^{N} \sum_{i=1}^{K} \mathbf{E}[z^t_i|X,\phi^l]\left[\ln p(\xVec^t|\phi) + \ln \pi_i\right]
+\end{align}
+Now,
+\begin{equation}
+	\begin{split}
+		\mathbf{E}[z^t_i|X,\phi^l] &= p(z^t_i = 1 | \xVec^t, \phi^l)\\
+		&= \frac{p(\xVec^t|z^t_i=1,\phi^l)p(z^t_i=1|\phi^l)}{\sum_{j=1}^{K}p(\xVec^t|z^t_j=1,\phi^l)p(z^t_j=1|\phi^l)}\\
+		&= \frac{p(\xVec^t|\phi^l)\pi_i}{\sum_{j=1}^{K} p(\xVec^t|\phi^l)\pi_j}\\
+		&= \frac{p(\xVec^t|G_i,\phi^l)p(G_i)}{\sum_{j=1}^{K}p(\xVec^t|G_j,\phi^l)p(G_j)}\\
+		&= p(G_i|\xVec^t, \phi^l)\\
+		&= \gamma(z^t_i)
+	\end{split}
+\end{equation}
+Therefore, from Eq.~(\ref{eq:e_step}), we try to formulate the maximization step as follows:
+\paragraph{M-step:} We try to maximize $\mathcal{E}(\phi|\phi^l)$:
+\begin{equation*}
+	\phi^{l+1} = \arg \max_{\phi} \mathcal{E}(\phi|\phi^l)
+\end{equation*}
+Now,
+\begin{equation}\label{eq:cost_func}
+	\begin{split}
+		\mathcal{E}(\phi|\phi^l) &= \sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\left[\ln p(\xVec^t|\phi) + \ln \pi_i\right] \\
+		&= \sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln p(\xVec^t|\phi) + \sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln \pi_i
+	\end{split}
+\end{equation}
+\paragraph{Maximization of priors, $\pi_i$:} This is a constrained optimization with the constraint being $\sum_{i=1}^{K}\pi_i = 1$. Therefore, we use Lagrangian method to solve for $\pi_i$ as follows:
+\begin{equation*}
+	\begin{split}
+		&\frac{\partial}{\partial \pi_i}\left[\sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln p(\xVec^t|\phi) + \sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln \pi_i - \lambda\left(\sum_{i=1}^{K}\pi_i-1\right)\right] = 0\\
+		\implies & \frac{\sum_{t=1}^{N}\gamma(z^t_i)}{\lambda} = \pi_i
+	\end{split}
+\end{equation*}
+Also,
+\begin{equation*}
+\begin{split}
+	&\frac{\partial}{\partial \lambda}\left[\sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln p(\xVec^t|\phi) + \sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln \pi_i - \lambda\left(\sum_{i=1}^{K}\pi_i-1\right)\right] = 0\\
+	\implies & \sum_{i=1}^{K} \pi_i = 1\\
+	\implies & \lambda^* = N
+	\end{split}
+\end{equation*}
+Therefore, the estimate of $\pi_i$ is:
+\begin{equation*}
+	\hat{\pi_i} = \frac{\sum_{t=1}^{N}\gamma(z^t_i)}{N}
+\end{equation*}
+\paragraph{Maximization of parameters of the components:} Here, it is given that,
+\begin{equation}
+	p(\xVec^t|\phi) = p(\xVec^t|\muVec_i, \sigmaVec_i) = \frac{1}{2\sigmaVec_i}e^{-\frac{|\xVec^t-\muVec_i|}{\sigmaVec_i}}
+\end{equation}
+Therefore, from Eq.~(\ref{eq:cost_func}),
+\begin{equation}
+	\begin{split}
+		&\frac{\partial}{\partial \sigmaVec_i}\left[\sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln p(\xVec^t|\phi) + \sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\ln \pi_i\right] = 0\\
+		\implies & \frac{\partial}{\partial \sigmaVec_i}\left[\sum_{t=1}^{N} \sum_{i=1}^{K} \gamma(z^t_i)\left(-\ln 2 - \ln \sigmaVec_i - \frac{1}{\sigmaVec_i}|\xVec^t-\muVec_i|\right)\right]\\
+		\implies & \sVec_i = \frac{\sum_{t=1}^{N}\gamma(z^t_i)|\xVec^t-\mVec_i|}{\sum_{t=1}^{N}\gamma(z^t_i)},
+	\end{split}
+\end{equation}
+where $\mVec_i$ is the MLE of $\muVec_i$ which is found as follows. To minimize Eq.~(\ref{eq:cost_func}) w.r.t. $\muVec_i$, we first binarize $\gamma(z^t_i)$ as $b^t_i=1$ if $i=\arg \max_{j}\gamma(z^t_j)$. Then MLE of $\muVec_i$, $\mVec_i$ is given by,
+\begin{equation*}
+	\mVec_i = median\left(\{\xVec^t\}^{N_i}_{t=1}\right),
+\end{equation*}
+where, $N_i=\sum_{t=1}^{N} b^t_i$
+\newline
+Once we find the MLEs of the parameters, we prepare the next iteration:
+\begin{equation*}
+	\begin{split}
+		\mVec_{i}^{l+1} &= \mVec_i\\
+		\sVec_i^{l+1} &= \sVec_i \\
+		\gamma(z^t_i) &= \frac{\hat{\pi_i}0.5\sVec_i^{-1}exp\left(-\frac{|\xVec^t-\mVec_i|}{\sVec_i}\right)}{\sum_{j=1}^{K}\hat{\pi_j}0.5\sVec_j^{-1}exp\left(-\frac{|\xVec^t-\mVec_j|}{\sVec_j}\right)}
+	\end{split}
+\end{equation*}
+

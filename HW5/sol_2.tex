@@ -1,0 +1,33 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 2
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 2}
+Hard margin version of the $\nu$-SVM is defined by the following optimization problem:
+\begin{align*}
+	\minimize_{\wVec} &\ \frac{1}{2} \Vert \wVec \Vert^2 -\nu\rho\\ 
+	\text{subject to } &r^t(\wVec^T\xVec^t + w_0) \geq \rho\\
+	& \rho \geq 0.
+\end{align*}
+We first write the unconstrained problem using Lagrange multipliers $\alpha^t$ and $\mu^t$ as follows:
+\begin{equation}\label{eq:primal}
+	\begin{split}
+		L_p = \frac{1}{2} \Vert \wVec \Vert^2 - \nu \rho - \sum_t \alpha^t[r^t(\wVec^T\xVec^t + w_0)-\rho] - \sum_t \mu^t \rho
+	\end{split}
+\end{equation}
+~(\ref{eq:primal}) has to be minimized w.r.t $\wVec, w_0$. The dual problem is to maximize $L_p$ w.r.t $\alpha^t$ subject to the constraint that the gradient of $L_p$ w.r.t $\wVec, w_0$ and $\rho$ is $0$. Therefore,
+\begin{equation}\label{eq:deri}
+	\begin{split}
+		\frac{\partial L_p}{\partial \wVec} &= \wVec - \sum_t \alpha^t r^t \xVec^t = 0 \implies \wVec = \sum_t \alpha^t r^t \xVec^t\\
+		\frac{\partial L_p}{\partial w_0} &= -\sum_t \alpha^t r^t = 0 \implies \sum_t \alpha^t r^t = 0\\
+		\frac{\partial L_p}{\partial \rho} &= -\nu + \sum_t \alpha^t - \sum_t \mu^t = 0 \implies \sum_t \alpha^t = \nu + \sum_t \mu^t
+	\end{split}
+\end{equation}
+Since $\mu^t \geq 0$, the last implies $\sum_t \alpha^t \geq \nu$. Plugging the above into~(\ref{eq:primal}), we get the dual $L_d$,
+\begin{equation}
+	\begin{split}
+		L_d &= \frac{1}{2} \wVec^T\wVec - \nu \rho -\sum_t[\alpha^tr^t\wVec^T\xVec^t+\alpha^tr^tw_0-\alpha^t\rho] - \sum_t\mu^t\rho\\
+		&= \frac{1}{2}\sum_t\sum_s \alpha^t \alpha^s r^t r^s (\xVec^t)^T\xVec^s - \nu\rho - \sum_t\sum_s\alpha^t\alpha^s r^tr^s (\xVec^t)^T\xVec^s +\sum_t \alpha^t\rho - \sum_t\mu^t\rho\\
+		&= -\frac{1}{2}\sum_t\sum_s \alpha^t \alpha^s r^t r^s (\xVec^t)^T\xVec^s\\
+		&\text{subject to }\sum_t\alpha^tr^t = 0,\ \sum_t \alpha^t \geq \nu
+	\end{split}
+\end{equation}

@@ -1,0 +1,77 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 1.a
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 1.a}
+\paragraph{Definitions:}
+\begin{equation}\label{eq:definitions}
+	\begin{split}
+		E(\boldsymbol{w_1}, \boldsymbol{w_2}, \boldsymbol{v} | X) &= - \sum_t r^t\ln y^t + (1-r^t)\ln (1-y^t),\\
+		y^t &= sigmoid\left(\sum_{j=1}^{2}[v_jz_j^t] + v_0\right),\\
+		z_1^t &= ReLU\left(\sum_{j=1}^{2}[w_{1j}x_j^t]+w_{10}\right),\\
+		z_2^t &= tanh\left(\sum_{j=1}^{2}[w_{2j}x_j^t]+w_{20}\right),\\
+		ReLU(x) &= \begin{cases}
+			0, \text{ for } x<0,\\
+			x, \text{ otherwise}
+		\end{cases}\\
+		ReLU'(x) &= \begin{cases}
+			0, \text{ for } x<0,\\
+			1, \text{ otherwise}.
+		\end{cases}\\
+		tanh'(x) &= 1-tanh^2(x)
+		\end{split}
+\end{equation}
+From the above definitions, we can find the following:
+\begin{equation}
+	\begin{split}
+		\frac{\partial E}{\partial y^t} &= -\left[\frac{r^t}{y^t} - \frac{1-r^t}{1-y^t}\right]\\
+		&= -\left[\frac{r^t-y^t}{y^t(1-y^t)}\right],\\
+		\frac{\partial y^t}{\partial v_j} &= y^t(1-y^t)z_j^t,\hspace*{0.5cm} j\in \{1,2\},\\
+		\frac{\partial y^t}{\partial z_j^t} &= y^t(1-y^t)v_j,\hspace*{0.5cm} j\in \{1,2\},\\ 
+		\frac{\partial z_1^t}{\partial w_{1j}} &= ReLU'\left(\sum_{j=1}^{2}[w_{1j}x_j^t]+w_{10}\right)x_j^t,\hspace*{0.5cm} j\in \{1,2\},\\
+		\frac{\partial z_2^t}{\partial w_{2j}} &= \left(1-tanh^2\left(\sum_{j=1}^{2}[w_{2j}x_j^t]+w_{20}\right)\right)x_j^t,\hspace*{0.5cm} j\in \{1,2\}.
+	\end{split}
+\end{equation}
+Based on the above equations we can find the weight updates as follows:
+\begin{equation}
+	\begin{split}
+		\Delta v_j 	&= - \eta \frac{\partial E}{\partial v_j},\hspace*{0.5cm} j\in \{1,2\}\\
+					&= -\eta \sum_{t} \frac{\partial E}{\partial y^t} \frac{\partial y^t}{\partial v_j}\\
+					&= \eta \sum_{t} [r^t - y^t]z_j^t\\
+		\Delta v_0	&= - \eta \frac{\partial E}{\partial v_0}\\
+					&= -\eta \sum_{t} \frac{\partial E}{\partial y^t} \frac{\partial y^t}{\partial v_0}\\
+					&= \eta \sum_{t} [r^t - y^t]\\
+	\end{split}
+\end{equation}
+and,
+\begin{equation}\label{eq:w_update}
+	\begin{split}
+		\Delta w_{1j} 	&= - \eta \frac{\partial E}{\partial w_{1j}},\hspace*{0.5cm} j\in \{1,2\}\\
+						&= -\eta \sum_{t} \frac{\partial E}{\partial y^t} \frac{\partial y^t}{\partial z_1^t} \frac{\partial z_1^t}{\partial w_{1j}}\\
+						&= \eta \sum_{t}\left[ (r^t-y^t)v_1ReLU'\left(\sum_{j=1}^{2}[w_{1j}x_j^t]+w_{10}\right)x_j^t\right]\\
+		\Delta w_{2j} 	&= - \eta \frac{\partial E}{\partial w_{2j}},\hspace*{0.5cm} j\in \{1,2\}\\
+						&= -\eta \sum_{t} \frac{\partial E}{\partial y^t} \frac{\partial y^t}{\partial z_2^t} \frac{\partial z_2^t}{\partial w_{2j}}\\
+						&= \eta \sum_{t}\left[ (r^t-y^t)v_2\left(1-tanh^2\left(\sum_{j=1}^{2}[w_{2j}x_j^t]+w_{20}\right)\right)x_j^t\right]\\
+		\Delta w_{10}	&= - \eta \frac{\partial E}{\partial w_{10}}\\
+						&= -\eta \sum_{t} \frac{\partial E}{\partial y^t} \frac{\partial y^t}{\partial z_1^t} \frac{\partial z_1^t}{\partial w_{10}}\\
+						&= \eta \sum_{t}\left[ (r^t-y^t)v_1ReLU'\left(\sum_{j=1}^{2}[w_{1j}x_j^t]+w_{10}\right)\right]\\
+		\Delta w_{20}	&=  - \eta \frac{\partial E}{\partial w_{20}}\\
+						&= -\eta \sum_{t} \frac{\partial E}{\partial y^t} \frac{\partial y^t}{\partial z_2^t} \frac{\partial z_2^t}{\partial w_{20}}\\
+						&= \eta \sum_{t}\left[ (r^t-y^t)v_2\left(1-tanh^2\left(\sum_{j=1}^{2}[w_{2j}x_j^t]+w_{20}\right)\right)\right]
+	\end{split}
+\end{equation}
+%----------------------------------------------------------------------------------------
+%	SOLUTION 1.b
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 1.b}
+For shared weights $\boldsymbol{w} = \boldsymbol{w_1} = \boldsymbol{w_2}$, we take the average over corresponding weights from a particular input. This does not change the update equation of $\boldsymbol{v}$. Therefore,
+\begin{equation}
+	\begin{split}
+		\Delta v_j 	&= \eta \sum_{t} [r^t - y^t]z_j^t,\hspace*{0.5cm} j\in \{1,2\}\\
+		\Delta v_0	&= \eta \sum_{t} [r^t - y^t]\\
+		\Delta w_0	&= \frac{1}{2}(\Delta w_{10} + \Delta w_{20})\\
+		\Delta w_1 &= \frac{1}{2}(\Delta w_{11} + \Delta w_{21})\\
+		\Delta w_2 &= \frac{1}{2}(\Delta w_{12} + \Delta w_{22}),
+	\end{split}
+\end{equation}
+where $\Delta w_{11}, \Delta w_{12}, \Delta w_{21}, \Delta w_{22}$ are found from~(\ref{eq:w_update}).
+

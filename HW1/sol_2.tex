@@ -1,0 +1,52 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 2
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 2.a}
+pdf is given by $f(x|\theta) = \frac{1}{\theta}e^{-\frac{x}{\theta}}$, where $x > 0, \theta > 0$. Sample size is $n$. The set of all samples is denoted by $\{x^t\}_{t=1}^n$.
+\subsubsection*{MLE Calculation}
+The likelihood function is given by
+\begin{equation*}
+	L = \prod_{t=1}^n \frac{1}{\theta}e^{-\frac{x^t}{\theta}}
+\end{equation*}
+Therefore, the log-likelihood function is given by
+\begin{equation*}
+F = \ln L = \sum_{t=1}^n \left[-\ln \theta - \frac{x^t}{\theta} \right]
+\end{equation*}
+To maximize the log-likelihood, we find $\frac{\partial F}{\partial \theta}$ and set it to $0$ to find the estimate of the parameter $\theta = \hat{\theta}$
+\begin{equation*}
+	\begin{split}
+		& \frac{\partial F}{\partial \theta} = - \frac{n}{\theta} + \frac{1}{\theta^2} \sum_{t=1}^n x^t\\
+		\implies & 0 = -\frac{n}{\hat{\theta}} + \frac{1}{\hat{\theta}^2} \sum_{t=1}^n x^t\\
+		\implies & \hat{\theta} = \frac{\sum_{t=1}^n x^t}{n} \hspace*{1cm} [\because \hat{\theta} > 0]
+	\end{split}
+\end{equation*}
+\subsection*{Solution 2.b}
+pdf is given by $f(x|\theta) = 2\theta x^{2\theta -1}$, where $0 < x \leq 1, 0 < \theta < \infty$. Sample size is $n$. The set of all samples is denoted by $\{x^t\}_{t=1}^n$.
+\subsubsection*{MLE Calculation}
+The likelihood function is given by
+\begin{equation*}
+L = \prod_{t=1}^n 2\theta x^{t^{2\theta -1}}
+\end{equation*}
+Therefore, the log-likelihood function is given by
+\begin{equation*}
+	\begin{split}
+		F = \ln L &= \sum_{t=1}^n \left[\ln 2 + \ln \theta + (2\theta -1) \ln x^{t} \right]\\
+		&= n \ln 2 + n\ln \theta + (2\theta -1) \sum_{t=1}^n \ln x^{t}
+	\end{split}
+\end{equation*}
+To maximize the log-likelihood, we find $\frac{\partial F}{\partial \theta}$ and set it to $0$ to find the estimate of the parameter $\theta = \hat{\theta}$
+\begin{equation*}
+	\begin{split}
+		& \frac{\partial F}{\partial \theta} = \frac{n}{\theta} + 2\sum_{t=1}^n \ln x^{t}\\
+		\implies & 0 = \frac{n}{\hat{\theta}} + 2\sum_{t=1}^n \ln x^{t}\\
+		\implies & \hat{\theta} = - \frac{n}{2\sum_{t=1}^n \ln x^{t}}
+	\end{split}
+\end{equation*}
+\subsection*{Solution 2.c}
+pdf is given by $f(x|\theta) = \frac{1}{2\theta}$, where $0 \leq x \leq 2\theta$. Sample size is $n$. The set of all samples is denoted by $\{x^t\}_{t=1}^n$.
+\subsubsection*{MLE Calculation}
+The likelihood function is given by
+\begin{equation*}
+L = \prod_{t=1}^n \left[\frac{1}{2\theta}\right] = \frac{1}{(2\theta)^n}
+\end{equation*}
+As this is a decreasing function of $\theta$, $L$ will be maximum when $\theta$ will be minimum for a given number of samples($n$). As $0 \leq x \leq 2\theta$, $\theta_{min} = \frac{max(x^1, x^2, \ldots, x^n)}{2}$

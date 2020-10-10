@@ -1,0 +1,9 @@
+filename = 'myTrain.txt';
+delimiterIn = ',';
+trn_data = importdata(filename, delimiterIn);
+X_trn = reshape(trn_data, [62, 1873]);
+X_trn = X_trn';
+d = 61;
+m = 3;
+k = 10;
+[z,w,v] = mlp_ondata(X_trn,d,m,k);

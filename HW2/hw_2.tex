@@ -1,5 +1,5 @@
 %----------------------------------------------------------------------------------------
-%	HOMEWORK ASSIGNMENT EE 8950
+%	HOMEWORK ASSIGNMENT CSCI 5521
 %----------------------------------------------------------------------------------------
 
 %----------------------------------------------------------------------------------------
@@ -14,6 +14,7 @@
 \usepackage{amssymb}					% Used to write math symbols e.g. R = real number set
 \usepackage{autobreak}
 \usepackage{graphicx}					% Used to include images
+\usepackage{tabularx} 					% For custom table %
 
 %----------------------------------------------------------------------------------------
 %	CUSTOM MACRO DEFINITION AND ENVIRONMENT MODIFICATION
@@ -21,15 +22,20 @@
 \titleformat{\section}{\bfseries\Large\scshape\filcenter}{}{0em}{}[{\titlerule[1pt]}] % Text formatting of sections
 \titlespacing{\section}{0pt}{3pt}{3pt} % Spacing around sections
 \pagestyle{empty} % Removes page numbering
-
+\newcommand{\xVec}{\ensuremath{\boldsymbol{x}}}
+\newcommand{\muVec}{\ensuremath{\boldsymbol{\mu}}}
+\newcommand{\mVec}{\ensuremath{\boldsymbol{m}}}
+\newcommand{\sVec}{\ensuremath{\boldsymbol{S}}}
+\newcommand{\SigmaVec}{\ensuremath{\boldsymbol{\Sigma}}}
 %----------------------------------------------------------------------------------------
 %	MAIN BODY
 %----------------------------------------------------------------------------------------
 \begin{document}
-    \input{sol_1_1}
-    \input{sol_1_2}
-    \input{sol_2_1}
+	\input{header}
+    \input{sol_1}
+    \input{sol_2}
     \input{sol_3}
+    %\input{sol_3}
     %\input{problem_2}
     %\input{solution_2}
 \end{document}

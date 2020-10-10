@@ -1,0 +1,299 @@
+%----------------------------------------------------------------------------------------
+%	SOLUTION 3
+%----------------------------------------------------------------------------------------
+\subsection*{Solution 3.a}
+$P(x|C)$ denotes a Bernoulli density function for a class $C \in \{C_1, C_2\}$
+and $P(C)$ denotes the prior.
+\paragraph{Given}
+\begin{equation*}
+	\begin{split}
+		& P(C_1), P(C_2) \text{, and considering exhaustive events, } P(C_1) + P(C_2) = 1\\
+		& p_1 = P(x=0|C_1) \implies (1-p_1) = P(x=1|C_1)\\
+		& p_2 = P(x=0|C_2) \implies (1-p_2) = P(x=1|C_2)
+	\end{split}
+\end{equation*}
+By Bayes rule, the posteriors are given by, $P(C_i|x) = \frac{P(x|C_i)P(C_i)}{P(x)}, i \in \{1,2\}$.
+\newline
+In case of Bernoulli density function, we have
+\begin{equation*}
+	P(x|C_i) = p_i^{1-x}(1-p_i)^x, x \in \{0,1\}, i \in \{1,2\}
+\end{equation*}
+and,
+\begin{equation*}
+	P(x) = \sum_{i=1}^{2} P(x|C_i)P(C_i)
+\end{equation*}
+For classification based on posteriors, we can create discriminant functions as follows,
+\begin{equation*}
+	g_i(x) = P(C_i|x) = \frac{P(x|C_i)P(C_i)}{P(x)}, i \in \{1,2\}
+\end{equation*}
+As for both the values of $i$, the denominator is same, we can take the decision based on $P(x|C_i)P(C_i)$. Therefore, our discriminant function can be reduced to
+\begin{equation}
+	\begin{split}
+		g_i(x) 	&= P(x|C_i)P(C_i), i \in \{1,2\}\\
+				&= p_i^{1-x}(1-p_i)^x P(C_i)
+	\end{split}
+\end{equation}
+or equivalently, (natural logarithm of the above discriminant function),
+\begin{equation}\label{eq:log_discriminant}
+	g_i(x) = (1-x)\ln p_i + x \ln (1-p_i) + \ln (P(C_i)), i \in \{1,2\}
+\end{equation}
+\paragraph{Classification Rule}
+Choose $C_i$ if $g_i(x) = \max_{k}g_k(x)$
+\newline
+In other words, choose $C_1$ if,
+\begin{equation}
+	\begin{split}
+		&(1-x)\ln p_1 + x \ln (1-p_1) + \ln (P(C_1)) \geq (1-x)\ln p_2 + x \ln (1-p_2) + \ln (P(C_2))\\
+		\implies & (1-x)\ln\left(\frac{p_1}{p_2}\right) \geq x \ln \left(\frac{1-p_2}{1-p_1}\right) + \ln\left(\frac{1-P(C_1)}{P(C_1)}\right)
+	\end{split}
+\end{equation}
+\subsection*{Solution 3.b}
+For $D$-dimensional independent Bernoulli densities specified by $p_{ij} = P(x_j = 0|C_i), i \in \{1,2\}, j \in \{1,2,\ldots, D\}$,
+\begin{equation}\label{eq:likelihood_multi}
+	P(x|C_i) = \prod_{j=1}^{D} p_{ij}^{1-x_j}(1-p_{ij})^{x_j}
+\end{equation}
+Therefore, as in case of Solution 3.a, the discriminant function can be given as follows,
+\begin{equation*}
+	g_i(x) = P(x|C_i)P(C_i) = \left[ \prod_{j=1}^{D} p_{ij}^{1-x_j}(1-p_{ij})^{x_j} \right]P(C_i)
+\end{equation*}
+or equivalently, (natural logarithm of the above discriminant function),
+\begin{equation}\label{eq:log_discriminant_multi}
+	g_i(x) = \sum_{j=1}^{D}\left[(1-x_j)\ln p_{ij} + x_j\ln(1-p_{ij})\right] + \ln(P(C_i))
+\end{equation}
+\paragraph{Classification Rule for D-dimensional Case}
+Choose $C_i$ if $g_i(x) = \max_{k}g_k(x)$
+\newline
+In other words, choose $C_1$ if,
+\begin{equation*}
+	\begin{split}
+		& \sum_{j=1}^{D}\left[(1-x_j)\ln p_{1j} + x_j\ln(1-p_{1j})\right] + \ln(P(C_1)) \geq \sum_{j=1}^{D}\left[(1-x_j)\ln p_{2j} + x_j\ln(1-p_{2j})\right] + \ln(P(C_2))\\
+		\implies & \sum_{j=1}^{D}\left[(1-x_j)\ln p_{1j} + x_j\ln(1-p_{1j})\right] \geq \sum_{j=1}^{D}\left[(1-x_j)\ln p_{2j} + x_j\ln(1-p_{2j})\right] + \ln\left( \frac{1-P(C_1)}{P(C_1)}\right)
+	\end{split}
+\end{equation*}
+\subsection*{Solution 3.c}
+Posterior probability is given by,
+\begin{equation*}
+	P(C_i|x) = \frac{P(x|C_i)P(C_i)}{P(x)}, i \in \{1,2\}
+\end{equation*}
+where $P(x|C_i)$ is given by (\ref{eq:likelihood_multi}). $P(x)$ is given by
+\begin{equation*}
+	P(x) = \sum_{i=1}^{2} P(x|C_i)P(C_i)
+\end{equation*}
+Posterior probabilities for different samples for different priors is tabulated below. Detail calculation has been given after the table.
+\begin{center}
+	\begin{tabular}{||c | c | c | c||} 
+		\hline
+		Samples & $P(C_1) = 0.2$ & $P(C_1) = 0.6$ & $P(C_1) = 0.8$ \\ [0.5ex] 
+		\hline\hline
+		(0,0) & $P(C_1|x) = 0.027$ & $P(C_1|x) = 0.143$ & $P(C_1|x) = 0.308$ \\
+			  & $P(C_2|x) = 0.973$ & $P(C_2|x) = 0.857$ & $P(C_2|x) = 0.692$ \\ 
+		\hline
+		(0,1) & $P(C_1|x) = 0.692$ & $P(C_1|x) = 0.931$ & $P(C_1|x) = 0.973$ \\
+		      & $P(C_2|x) = 0.308$ & $P(C_2|x) = 0.069$ & $P(C_2|x) = 0.027$ \\ 
+		\hline
+		(1,0) & $P(C_1|x) = 0.027$ & $P(C_1|x) = 0.143$ & $P(C_1|x) = 0.308$ \\
+		      & $P(C_2|x) = 0.973$ & $P(C_2|x) = 0.857$ & $P(C_2|x) = 0.692$ \\ 
+		\hline
+		(1,1) & $P(C_1|x) = 0.692$ & $P(C_1|x) = 0.931$ & $P(C_1|x) = 0.973$ \\
+		      & $P(C_2|x) = 0.308$ & $P(C_2|x) = 0.069$ & $P(C_2|x) = 0.027$ \\ [1ex]
+		\hline
+	\end{tabular}
+\end{center}
+\paragraph{Calculation}
+\paragraph{Sample: x = (0,0)}
+From (\ref{eq:likelihood_multi}),
+\begin{equation*}
+	\begin{split}
+		P(x|C_1) &= p_{11}p_{12} = 0.6 \times 0.1 = 0.06\\
+		P(x|C_2) &= p_{21}p_{22} = 0.6 \times 0.9 = 0.54
+	\end{split}
+\end{equation*}
+Therefore,
+\begin{equation}\label{eq:evidence_multi}
+	P(x) = P(x|C_1)P(C_1) + P(x|C_2)P(C_2) = 0.06\times P(C_1) + 0.54 \times P(C_2)
+\end{equation}
+For $P(C_1) = 0.2, P(C_2) = 0.8$,
+\begin{equation}
+	\begin{split}
+		P(x) &= 0.444\\
+		P(C_1|x) &= \frac{0.06\times 0.2}{0.444}\\
+		&= 0.027\\
+		P(C_2|x) &= \frac{0.54 \times 0.8}{0.444}\\
+		&= 0.973
+	\end{split}
+\end{equation}
+For $P(C_1) = 0.6, P(C_2) = 0.4$,
+\begin{equation}
+	\begin{split}
+		P(x) &= 0.252\\
+		P(C_1|x) &= \frac{0.06\times 0.6}{0.252}\\
+		&= 0.143\\
+		P(C_2|x) &= \frac{0.54 \times 0.4}{0.252}\\
+		&= 0.857
+	\end{split}
+\end{equation}
+For $P(C_1) = 0.8, P(C_2) = 0.2$,
+\begin{equation}
+	\begin{split}
+		P(x) &= 0.156\\
+		P(C_1|x) &= \frac{0.06\times 0.8}{0.156}\\
+		&= 0.308\\
+		P(C_2|x) &= \frac{0.54 \times 0.2}{0.156}\\
+		&= 0.692
+	\end{split}
+\end{equation}
+\paragraph{Sample: x = (0,1)}
+From (\ref{eq:likelihood_multi}),
+\begin{equation*}
+	\begin{split}
+	P(x|C_1) &= p_{11}(1-p_{12}) = 0.6 \times 0.9 = 0.54\\
+	P(x|C_2) &= p_{21}(1-p_{22}) = 0.6 \times 0.1 = 0.06
+	\end{split}
+\end{equation*}
+Therefore,
+\begin{equation}\label{eq:evidence_multi}
+	P(x) = P(x|C_1)P(C_1) + P(x|C_2)P(C_2) = 0.54\times P(C_1) + 0.06 \times P(C_2)
+\end{equation}
+For $P(C_1) = 0.2, P(C_2) = 0.8$,
+\begin{equation}
+	\begin{split}
+		P(x) &= 0.156\\
+		P(C_1|x) &= \frac{0.54\times 0.2}{0.156}\\
+		&= 0.692\\
+		P(C_2|x) &= \frac{0.06 \times 0.8}{0.156}\\
+		&= 0.3077
+	\end{split}
+\end{equation}
+For $P(C_1) = 0.6, P(C_2) = 0.4$,
+\begin{equation}
+	\begin{split}
+		P(x) &= 0.348\\
+		P(C_1|x) &= \frac{0.54\times 0.6}{0.348}\\
+		&= 0.931\\
+		P(C_2|x) &= \frac{0.06 \times 0.4}{0.348}\\
+		&= 0.069
+	\end{split}
+\end{equation}
+For $P(C_1) = 0.8, P(C_2) = 0.2$,
+\begin{equation}
+	\begin{split}
+		P(x) &= 0.444\\
+		P(C_1|x) &= \frac{0.54\times 0.8}{0.444}\\
+		&= 0.973\\
+		P(C_2|x) &= \frac{0.06 \times 0.2}{0.444}\\
+		&= 0.027
+	\end{split}
+\end{equation}
+\paragraph{Sample: x = (1,0)}
+From (\ref{eq:likelihood_multi}),
+\begin{equation*}
+	\begin{split}
+		P(x|C_1) &= (1-p_{11})p_{12} = 0.4 \times 0.1 = 0.04\\
+		P(x|C_2) &= (1-p_{21})p_{22} = 0.4 \times 0.9 = 0.36
+	\end{split}
+\end{equation*}
+Therefore,
+\begin{equation*}\label{eq:evidence_multi}
+	P(x) = P(x|C_1)P(C_1) + P(x|C_2)P(C_2) = 0.04\times P(C_1) + 0.36 \times P(C_2)
+\end{equation*}
+For $P(C_1) = 0.2, P(C_2) = 0.8$,
+\begin{equation*}
+	\begin{split}
+		P(x) &= 0.296\\
+		P(C_1|x) &= \frac{0.04\times 0.2}{0.296}\\
+		&= 0.027\\
+		P(C_2|x) &= \frac{0.36 \times 0.8}{0.296}\\
+		&= 0.973
+	\end{split}
+\end{equation*}
+For $P(C_1) = 0.6, P(C_2) = 0.4$,
+\begin{equation*}
+	\begin{split}
+		P(x) &= 0.168\\
+		P(C_1|x) &= \frac{0.04\times 0.6}{0.168}\\
+		&= 0.143\\
+		P(C_2|x) &= \frac{0.36 \times 0.4}{0.168}\\
+		&= 0.857
+	\end{split}
+\end{equation*}
+For $P(C_1) = 0.8, P(C_2) = 0.2$,
+\begin{equation*}
+	\begin{split}
+		P(x) &= 0.104\\
+		P(C_1|x) &= \frac{0.04\times 0.8}{0.104}\\
+		&= 0.308\\
+		P(C_2|x) &= \frac{0.36 \times 0.2}{0.104}\\
+		&= 0.692
+	\end{split}
+\end{equation*}
+\paragraph{Sample: x = (1,1)}
+From (\ref{eq:likelihood_multi}),
+\begin{equation*}
+	\begin{split}
+		P(x|C_1) &= (1-p_{11})(1-p_{12}) = 0.4 \times 0.9 = 0.36\\
+		P(x|C_2) &= (1-p_{21})(1-p_{22}) = 0.4 \times 0.1 = 0.04
+	\end{split}
+\end{equation*}
+Therefore,
+\begin{equation*}\label{eq:evidence_multi}
+	P(x) = P(x|C_1)P(C_1) + P(x|C_2)P(C_2) = 0.36\times P(C_1) + 0.04 \times P(C_2)
+\end{equation*}
+For $P(C_1) = 0.2, P(C_2) = 0.8$,
+\begin{equation*}
+	\begin{split}
+		P(x) &= 0.104\\
+		P(C_1|x) &= \frac{0.36\times 0.2}{0.104}\\
+		&= 0.692\\
+		P(C_2|x) &= \frac{0.04 \times 0.8}{0.104}\\
+		&= 0.308
+	\end{split}
+\end{equation*}
+For $P(C_1) = 0.6, P(C_2) = 0.4$,
+\begin{equation*}
+	\begin{split}
+		P(x) &= 0.232\\
+		P(C_1|x) &= \frac{0.36\times 0.6}{0.232}\\
+		&= 0.931\\
+		P(C_2|x) &= \frac{0.04 \times 0.4}{0.232}\\
+		&= 0.069
+	\end{split}
+\end{equation*}
+For $P(C_1) = 0.8, P(C_2) = 0.2$,
+\begin{equation*}
+	\begin{split}
+		P(x) &= 0.296\\
+		P(C_1|x) &= \frac{0.36\times 0.8}{0.296}\\
+		&= 0.973\\
+		P(C_2|x) &= \frac{0.04 \times 0.2}{0.296}\\
+		&= 0.027
+	\end{split}
+\end{equation*}
+\subsection*{Solution 4}
+\begin{table}[h!]
+\begin{center}
+	\begin{tabular}{||c | c | c | c | c | c | c | c | c | c | c | c ||} 
+		\hline
+		$\sigma$ & -5 & -4 & -3 & -2 & -1 & 0 & 1 & 2 & 3 & 4 & 5 \\ [0.5ex] 
+		\hline\hline
+		$P(C_1|\sigma)$ & 0.007 & 0.018 & 0.047 & 0.119 & 0.269 & 0.5 & 0.731 & 0.881 & 0.953 & 0.982 & 0.993 \\
+		\hline
+		Error rate(\%) & 54 & 54 & 54 & 51 & 49 & 52 & 45 & 46 & 46 & 46 & 46 \\ [1ex]
+		\hline
+	\end{tabular}
+\end{center}
+\caption{Error-rate Vs. $\sigma$ table}
+\end{table}
+\begin{table}[h!]
+	\begin{center}
+		\begin{tabular}{||c|c||}
+			\hline
+			$\sigma$ & 1 \\ [0.5ex]
+			\hline\hline
+			$P(C_1|\sigma)$ & 0.731 \\
+			\hline
+			Error rate(\%) & 47.5 \\ [1ex]
+			\hline
+		\end{tabular}
+	\end{center}
+\caption{Error rate on test dataset}
+\end{table}
